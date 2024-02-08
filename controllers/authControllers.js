@@ -29,8 +29,9 @@ const signup = async (req, res, next) => {
     // })
     // await user.save();
     const user=await User.create({username,email,password})
-    return res.status(201).json({
+    res.status(201).json({
       message:'User created successfully',
+      status:'success',
       data:{user}
     })
     // Create a new user instance using the User model
@@ -55,7 +56,7 @@ const login = async (req, res, next) => {
     if(!email || !password){
       return res.status(400).json({
         status:'Error',
-        message:'Both Email and Password are required'
+        message:'Please provide email and password'
       })
 
     }
@@ -76,7 +77,7 @@ const login = async (req, res, next) => {
         expiresIn:'1h'
       }
       )
-     return res.status(200).json({token:jwtToken,status:'Success'})
+      res.status(200).json({token:jwtToken,status:'Success'})
     // Find the user in the database by their email
     // If the user is not found, send an error response
     // Compare the provided password with the stored password using bcrypt
