@@ -23,6 +23,16 @@ const decodeToken = (req, res, next) => {
 const signup = async (req, res, next) => {
   try {
     // Extract user data from the request body (e.g., username, email, password)
+    const{username,email,password}=req.body;
+    // const user=new User({
+    //   username,email,password
+    // })
+    // await user.save();
+    const user=await User.create({username,email,password})
+    res.status(201).json({
+      message:'User created successfully',
+      data:{user}
+    })
     // Create a new user instance using the User model
     // Save the user to the database
     // Handle success and send a success response with user data
@@ -40,7 +50,33 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     // Extract user credentials from the request body (e.g., email, password)
+    const{email,password}=req.body;
     // Check if both email and password are provided; if not, send an error response
+    if(!email || !password){
+      return res.status(400).json({
+        status:'error',
+        message:'Both Email and Password are required'
+      })
+
+    }
+    const user=await User.findOne({email});
+    if(!user){
+      return res.status(401).json(
+        {message:'Invalid email or password',status:'Error',error:'Invalid Credentials'}
+      )
+    }
+    const isPasswordMatch=await bcrypt.comapare(password,user.password)
+    if(!isPasswordMatch){
+      return res.status(401).json(
+        {message:'Invalid email or password',status:'Error',error:'Invalid Credentials'}
+      )
+    }
+    const jwtToken=jwt.sign({userId:user._id,username:user.username,email:user.email},
+      JWT_SECRET,{
+        expiresIn:'1h'
+      }
+      )
+      res.status(200).json({token:jwtToken,status:'Success'})
     // Find the user in the database by their email
     // If the user is not found, send an error response
     // Compare the provided password with the stored password using bcrypt
