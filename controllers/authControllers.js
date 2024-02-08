@@ -29,7 +29,7 @@ const signup = async (req, res, next) => {
     // })
     // await user.save();
     const user=await User.create({username,email,password})
-    res.status(201).json({
+    return res.status(201).json({
       message:'User created successfully',
       data:{user}
     })
@@ -76,7 +76,7 @@ const login = async (req, res, next) => {
         expiresIn:'1h'
       }
       )
-      res.status(200).json({token:jwtToken,status:'Success'})
+     return res.status(200).json({token:jwtToken,status:'Success'})
     // Find the user in the database by their email
     // If the user is not found, send an error response
     // Compare the provided password with the stored password using bcrypt
