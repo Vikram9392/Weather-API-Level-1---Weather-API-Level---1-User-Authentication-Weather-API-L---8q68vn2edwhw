@@ -54,7 +54,7 @@ const login = async (req, res, next) => {
     // Check if both email and password are provided; if not, send an error response
     if(!email || !password){
       return res.status(400).json({
-        status:'error',
+        status:'Error',
         message:'Both Email and Password are required'
       })
 
