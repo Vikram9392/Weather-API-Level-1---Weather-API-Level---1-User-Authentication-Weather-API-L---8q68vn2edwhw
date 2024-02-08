@@ -66,7 +66,7 @@ const login = async (req, res, next) => {
         {message:'Invalid email or password',status:'Error',error:'Invalid Credentials'}
       )
     }
-    const isPasswordMatch=await bcrypt.comapare(password,user.password)
+    const isPasswordMatch=await bcrypt.compare(password,user.password)
     if(!isPasswordMatch){
       return res.status(401).json(
         {message:'Invalid email or password',status:'Error',error:'Invalid Credentials'}
@@ -77,7 +77,7 @@ const login = async (req, res, next) => {
         expiresIn:'1h'
       }
       )
-      return res.status(200).json({token:jwtToken,status:'Success'})
+      res.status(200).json({token:jwtToken,status:'Success'})
     // Find the user in the database by their email
     // If the user is not found, send an error response
     // Compare the provided password with the stored password using bcrypt
